@@ -2,8 +2,9 @@ pipeline {
     agent any
     environment{
         AWS_REGION = "eu-north-1"
-        ECR_REPO = "160885294916.dkr.ecr.eu-north-1.amazonaws.com/nodejs-app"
-        IMAGE_TAG ="latest"
+        ECR_REGISTRY = "160885294916.dkr.ecr.eu-north-1.amazonaws.com"
+        IMAGE_TAG = "latest"
+        ECR_REPO = "nodejs-app"
 
 
     }
@@ -29,15 +30,15 @@ pipeline {
             steps{
                 sh '''
                 aws ecr get-login-password --region $AWS_REGION | \
-                docker login --username AWS -password-stdin $ECR_REPO
+                docker login --username AWS --password-stdin $ECR_REGISTRY
                    '''
             }
         }
         stage('Tag & push Docker Image to ECR') {
             steps{
                 sh '''
-                docker tag nodejs-app:latest $ECR_REPO:$IMAGE_TAG
-                docker push $ECR_REPO:$IMAGE_TAG        
+                docker tag nodejs-app:latest $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+                docker push $ECR_REGISTRTY/$ECR_REPO:$IMAGE_TAG        
                    '''
              }
         }
@@ -46,8 +47,8 @@ pipeline {
                 sh '''
                 docker stop nodejs-app || true
                 docker rm nodejs-app || true
-                docker pull $ECR_REPO:$IMAGE_TAG
-                docker run -d -p 3000:3000 --name nodejs-app $ECR_REPO:$IMAGE_TAG
+                docker pull $ECR_REGISTRTY/$ECR_REPO:$IMAGE_TAG
+                docker run -d -p 3000:3000 --name nodejs-app $ECR_REGISTRTY/$ECR_REPO:$IMAGE_TAG
                    '''
 
             }
