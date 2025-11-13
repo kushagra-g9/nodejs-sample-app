@@ -38,7 +38,7 @@ pipeline {
             steps{
                 sh '''
                 docker tag nodejs-app:latest $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
-                docker push $ECR_REGISTRTY/$ECR_REPO:$IMAGE_TAG        
+                docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG        
                    '''
              }
         }
@@ -47,8 +47,8 @@ pipeline {
                 sh '''
                 docker stop nodejs-app || true
                 docker rm nodejs-app || true
-                docker pull $ECR_REGISTRTY/$ECR_REPO:$IMAGE_TAG
-                docker run -d -p 3000:3000 --name nodejs-app $ECR_REGISTRTY/$ECR_REPO:$IMAGE_TAG
+                docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+                docker run -d -p 3000:3000 --name nodejs-app $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
                    '''
 
             }
