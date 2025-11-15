@@ -3,7 +3,7 @@ pipeline {
     environment{
         AWS_REGION = "eu-north-1"
         ECR_REGISTRY = "160885294916.dkr.ecr.eu-north-1.amazonaws.com"
-        IMAGE_TAG = "latest"
+        IMAGE_TAG = "latest" #usecommit_id
         ECR_REPO = "nodejs-app"
 
 
