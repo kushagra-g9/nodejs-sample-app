@@ -48,7 +48,6 @@ deploy_to_production:
     - docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
 
     # Run new container with commit ID
-    - docker run -d -p 3000:3000 --name nodejs-app \
-      $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+    - docker run -d -p 3000:3000 --name nodejs-app $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
   tags:
     - shell
