@@ -26,7 +26,7 @@ tag_and_push_docker_image:
     - export IMAGE_TAG=$CI_COMMIT_SHORT_SHA
     - echo "Tagging image as:$IMAGE_TAG"
 
-    # Tag only commit-tagged image
+    # Tag only commit-tagged image 
     - docker tag myapp:build $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
 
     # Push commit-tagged image
