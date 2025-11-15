@@ -18,7 +18,7 @@ build_docker_image:
     - echo "Building Docker image for commit:$CI_COMMIT_SHORT_SHA"
     - docker build -t myapp:build .
   tags:
-    - docker
+    - shell
 
 tag_and_push_docker_image:
   stage: tag_and_push
@@ -32,7 +32,7 @@ tag_and_push_docker_image:
     # Push commit-tagged image
     - docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
   tags:
-    - docker
+    - shell
 
 deploy_to_production:
   stage: deploy
@@ -51,4 +51,4 @@ deploy_to_production:
     - docker run -d -p 3000:3000 --name nodejs-app \
       $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
   tags:
-    - docker
+    - shell
