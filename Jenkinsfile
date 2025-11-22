@@ -11,6 +11,12 @@ pipeline {
 
     }
     stages{
+
+        stage('Clean Workspace') {
+           steps {
+        cleanWs()
+      }
+        }
         stage('Checkout') {
             steps {
              git url: 'https://github.com/kushagra-g9/nodejs-sample-app.git' , branch: 'main'
