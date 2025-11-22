@@ -3,8 +3,10 @@ pipeline {
     environment{
         AWS_REGION = "eu-north-1"
         ECR_REGISTRY = "160885294916.dkr.ecr.eu-north-1.amazonaws.com"
-        IMAGE_TAG = "latest" #usecommit_id
+        IMAGE_TAG    = "${GIT_COMMIT}"
         ECR_REPO = "nodejs-app"
+        EC2_HOST = "ubuntu@56.228.9.153
+                 //<APP_EC2_PUBLIC_IP_OR_PRIVATE_IP>"
 
 
     }
@@ -22,7 +24,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps{
-                sh 'docker build -t nodejs-app .'
+                sh 'docker build -t $ECR_REPO:latest .'
 
             }
         }
@@ -37,7 +39,7 @@ pipeline {
         stage('Tag & push Docker Image to ECR') {
             steps{
                 sh '''
-                docker tag nodejs-app:latest $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+                docker tag $ECR_REPO:latest $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
                 docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG        
                    '''
              }
@@ -45,10 +47,16 @@ pipeline {
         stage('Deploy Container on EC2') {
             steps{
                 sh '''
-                docker stop nodejs-app || true
-                docker rm nodejs-app || true
-                docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
-                docker run -d -p 3000:3000 --name nodejs-app $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+                ssh -o StrictHostKeyChecking=no $EC2_HOST "
+                    sudo docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG &&
+                    sudo docker stop nodejs-app || true &&
+                    sudo docker rm nodejs-app || true &&
+                    sudo docker run -d \
+                        --restart always \
+                        -p 3000:3000 \
+                        --name nodejs-app \
+                        $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+                        "
                    '''
 
             }
