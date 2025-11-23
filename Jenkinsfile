@@ -54,7 +54,9 @@ pipeline {
                 sshagent(credentials: ['ubuntu_ssh_key']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '
-                        
+                        echo 'Logging into ECR...'
+                        aws ecr get-login-password --region $AWS_REGION | \
+                        sudo docker login --username AWS --password-stdin ${ECR_REGISTRY}
                         echo "Pulling latest image..."
                         sudo docker pull ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}
 
@@ -67,7 +69,6 @@ pipeline {
                             --restart=always \
                             -p 3000:3000 \
                             --name nodejs-app \
-                            -e NODE_ENV=production \
                             ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}
 
                         echo "Waiting for app to start..."
