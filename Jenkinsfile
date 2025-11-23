@@ -22,12 +22,7 @@ pipeline {
              git url: 'https://github.com/kushagra-g9/nodejs-sample-app.git' , branch: 'main'
             }
         }
-        stage('Build') {
-            steps {
-                sh 'npm install'
-
-            }
-        }
+       
         stage('Build Docker Image') {
             steps{
                 sh 'docker build -t $ECR_REPO:latest .'
