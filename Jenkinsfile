@@ -5,8 +5,8 @@ pipeline {
         ECR_REGISTRY = "160885294916.dkr.ecr.eu-north-1.amazonaws.com"
         IMAGE_TAG    = "${GIT_COMMIT}"
         ECR_REPO = "nodejs-app"
-        EC2_HOST = "ubuntu@13.60.213.97
-                 //<APP_EC2_PUBLIC_IP_OR_PRIVATE_IP>"
+        EC2_HOST = "ubuntu@13.60.213.97"
+                 //<APP_EC2_PUBLIC_IP_OR_PRIVATE_IP>
 
 
     }
