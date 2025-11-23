@@ -47,6 +47,7 @@ pipeline {
         }
         stage('Deploy Container on EC2') {
             steps{
+                sshagent(['app-ec2-ssh']) {
                 sh '''
                 ssh -o StrictHostKeyChecking=no $EC2_HOST "
                     sudo docker pull $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG &&
