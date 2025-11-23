@@ -51,7 +51,7 @@ pipeline {
 
         stage('Deploy to EC2 (Blue-Green Style)') {
             steps {
-                sshagent(credentials: ['app-ec2-ssh']) {
+                sshagent(credentials: ['ubuntu_ssh_key']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '
                         
